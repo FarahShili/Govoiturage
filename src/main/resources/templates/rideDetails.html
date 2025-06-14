@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Details - GoVoiturage</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(to right, #0078A6, #00A8E8);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .header a {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        .header a:hover {
+            color: #ffc107;
+        }
+
+        /* Card Section */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background: linear-gradient(to right, #0078A6, #00A8E8);
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .card-body p strong {
+            color: #0078A6;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background-color: #0078A6;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #005f7f;
+        }
+
+        /* Reviews Section */
+        .reviews {
+            padding-top: 10px;
+        }
+
+        .review {
+            background-color: #e9f5fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .review p {
+            margin: 0;
+        }
+
+        .rating {
+            color: #ffc107;
+        }
+
+        .rating .empty {
+            color: #e4e5e9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<div class="header">
+    <a href="index.html"><i class="fas fa-arrow-left"></i></a>
+    <i class="fas fa-car"></i> GoVoiturage - Ride Details
+</div>
+
+<!-- Content Container -->
+<div class="container mt-4">
+    <!-- Trip Details Card -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-route"></i> Trip Information
+        </div>
+        <div class="card-body">
+            <p><strong><i class="fas fa-map-marker-alt"></i> Start Location:</strong> <span th:text="${ride.startLocation}"></span></p>
+            <p><strong><i class="fas fa-map-marker-alt"></i> End Location:</strong> <span th:text="${ride.endLocation}"></span></p>
+            <p><strong><i class="fas fa-calendar-alt"></i> Departure Date:</strong> <span th:text="${ride.departureDate}"></span></p>
+            <p><strong><i class="fas fa-chair"></i> Available Seats:</strong> <span th:text="${ride.availableSeats}"></span></p>
+            <p><strong><i class="fas fa-dollar-sign"></i> Price per Seat:</strong> <span th:text="${ride.pricePerSeat}"></span></p>
+            <p><strong><i class="fas fa-user"></i> Driver:</strong> <span th:text="${ride.driver.firstName}"></span></p>
+        </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-star"></i> Reviews
+        </div>
+        <div class="card-body reviews">
+            <div th:if="${reviews.isEmpty()}">
+                <p class="text-muted">No reviews available for this ride yet.</p>
+            </div>
+            <div th:each="review : ${reviews}" class="review">
+                <p><strong><i class="fas fa-user"></i> Reviewer:</strong> <span th:text="${review.reviewer.firstName}"></span></p>
+                <p>
+                    <strong>Rating:</strong>
+                    <!-- Render stars for the rating -->
+                    <span>
+                            <i class="fas fa-star" th:each="star : ${#numbers.sequence(1, review.rating)}" style="color: #ffc107;"></i>
+                        </span>
+                    <!-- Render empty stars if the rating is less than 5 -->
+                    <span th:if="${review.rating < 5}">
+                            <i class="fas fa-star empty" th:each="emptyStar : ${#numbers.sequence(review.rating + 1, 5)}"></i>
+                        </span>
+                </p>
+                <p><strong><i class="fas fa-comment"></i> Comment:</strong> <span th:text="${review.comment}">Very comfortable ride!</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

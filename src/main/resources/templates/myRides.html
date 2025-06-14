@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Rides</title>
+    <!-- Ajouter la police Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: white; /* Fond blanc */
+            font-family: 'Poppins', sans-serif; /* Application de la police Poppins */
+            color: #333333; /* Texte par défaut noir/gris foncé */
+        }
+
+        .sidebar {
+            background: linear-gradient(to right, #0078A6, #00A8E8); /* Dégradé pour la sidebar */
+            height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .card {
+            border: none; /* Retirer la bordure */
+            border-radius: 12px; /* Coins arrondis */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre douce */
+            background-color: #ffffff; /* Fond blanc pour les cartes */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            color: #00A8E8; /* Bleu clair pour les titres */
+            font-weight: 600;
+        }
+
+        .card-body {
+            background-color: #f4f9fc; /* Fond clair légèrement bleuté */
+            border-top: 4px solid #0078A6; /* Ligne de couleur au sommet */
+            border-radius: 0 0 12px 12px;
+        }
+
+        .btn-success {
+            background-color: #0078A6;
+            border-color: #0078A6;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #005f80;
+            transform: translateY(-3px);
+        }
+
+        .navbar {
+            background: linear-gradient(to right, #0078A6, #00A8E8); /* Dégradé de la navbar */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
+            border-bottom: 1px solid #e0e0e0; /* Ligne fine discrète */
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: white; /* Blanc pour la marque sur dégradé */
+            font-size: 1.5rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: white; /* Liens en blanc */
+            font-weight: 500;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #00A8E8; /* Survol bleu clair */
+            color: #0078A6; /* Texte en bleu foncé */
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #00A8E8; /* Bleu clair pour les titres */
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .text-muted {
+            color: #0078A6 !important; /* Texte bleu foncé */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Inclure la Navbar -->
+<div th:replace="~{fragments :: header}"></div>
+
+<div class="container">
+    <h1 class="text-center">My Rides</h1>
+    <div class="row">
+        <!-- Vérifiez si l'utilisateur a des trajets -->
+        <div th:if="${#lists.isEmpty(userRides)}" class="col-12 text-center">
+            <p class="text-muted">You have not added any rides yet.</p>
+        </div>
+        <!-- Boucle sur les trajets -->
+        <div th:each="ride : ${userRides}" class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${ride.startLocation} + ' → ' + ${ride.endLocation}"></h5>
+                    <p class="card-text">
+                        <strong>Departure:</strong> <span th:text="${ride.departureDate}"></span><br>
+                        <strong>Seats:</strong> <span th:text="${ride.availableSeats}"></span><br>
+                        <strong>Price:</strong> <span th:text="${ride.pricePerSeat} + ' DT'"></span>
+                    </p>
+                    <a th:href="@{/rideDetails/{id}(id=${ride.id})}" class="btn btn-success btn-sm">Show more</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
